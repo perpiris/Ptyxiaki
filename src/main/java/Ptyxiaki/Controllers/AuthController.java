@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AuthController {
@@ -31,21 +32,25 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("user") RegisterDto user,
-                           BindingResult result, Model model) {
+    public String register(@Valid @ModelAttribute("user") RegisterDto user, BindingResult result, Model model , final RedirectAttributes redirectAttributes) {
+
         AppUser existingUserEmail = userService.findByEmail(user.getEmail());
         if (existingUserEmail != null && existingUserEmail.getEmail() != null && !existingUserEmail.getEmail().isEmpty()) {
-            return "redirect:/register?fail";
+            return "register";
         }
+
         AppUser existingUserUsername = userService.findByUsername(user.getUsername());
         if (existingUserUsername != null && existingUserUsername.getUsername() != null && !existingUserUsername.getUsername().isEmpty()) {
-            return "redirect:/register?fail";
+            return "register";
         }
+
         if (result.hasErrors()) {
             model.addAttribute("user", user);
             return "register";
         }
+
         userService.saveUser(user);
-        return "redirect:/";
+        redirectAttributes.addFlashAttribute("MSG_SUCCESS", "Registration successful.");
+        return "redirect:/login";
     }
 }

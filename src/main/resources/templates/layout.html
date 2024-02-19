@@ -22,6 +22,9 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/}">Home</a>
                 </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item">
+                    <a class="nav-link" th:href="@{/posts}">Posted Jobs</a>
+                </li>
             </ul>
 
             <ul class="navbar-nav">
