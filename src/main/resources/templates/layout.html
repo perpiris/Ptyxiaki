@@ -25,14 +25,23 @@
                 <li sec:authorize="isAuthenticated()" class="nav-item">
                     <a class="nav-link" th:href="@{/posts}">Posted Jobs</a>
                 </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item">
+                    <a class="nav-link" th:href="@{/posts/applications}">My Applications</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item">
+                    <a class="nav-link" th:href="@{/posts/manage}">My Posts</a>
+                </li>
             </ul>
 
             <ul class="navbar-nav">
                 <li sec:authorize="!isAuthenticated()"  class="nav-item">
-                    <a class="nav-link" th:href="@{/login}">Login</a>
+                    <a class="nav-link" th:href="@{/login}">Log in</a>
                 </li>
                 <li sec:authorize="!isAuthenticated()"  class="nav-item">
                     <a class="nav-link" th:href="@{/register}">Register</a>
+                </li>
+                <li sec:authorize="isAuthenticated()"  class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">Log out</a>
                 </li>
             </ul>
         </div>

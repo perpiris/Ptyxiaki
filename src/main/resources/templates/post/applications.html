@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>My Applications</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="d-flex flex-wrap mb-4">
+        <h1 class="flex-grow-1">My Applications</h1>
+    </div>
+
+    <div th:if="${posts.empty}">You haven't applied to any posts yet.</div>
+</div>
+</body>
+</html>

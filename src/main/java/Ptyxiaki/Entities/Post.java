@@ -4,11 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -22,12 +19,11 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false, columnDefinition = "text")
     private String description;
-
-    @CreationTimestamp
-    private LocalDateTime createdOn;
 
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)

@@ -1,20 +1,27 @@
 package Ptyxiaki.Dtos;
 
-import lombok.Data;
-
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 @Data
 public class RegisterDto {
 
-    private Long id;
+//    @NotEmpty
+//    private String name;
+//
+//    @NotEmpty
+//    private String surname;
 
-    @NotEmpty
+    @NotEmpty(message = "This field is required.")
     private String username;
 
-    @NotEmpty
+    @NotEmpty(message = "This field is required.")
     private String email;
 
-    @NotEmpty
+    @NotEmpty(message = "This field is required.")
     private String password;
+
+//    @NotNull
+//    private String role;
 }

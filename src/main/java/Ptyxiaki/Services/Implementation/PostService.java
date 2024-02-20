@@ -1,10 +1,19 @@
 package Ptyxiaki.Services.Implementation;
 
+import Ptyxiaki.Dtos.PostDto;
+import Ptyxiaki.Entities.AppUser;
+import Ptyxiaki.Entities.Post;
 import Ptyxiaki.Repositories.IPostRepository;
 import Ptyxiaki.Repositories.IUserRepository;
+import Ptyxiaki.Security.SecurityUtility;
 import Ptyxiaki.Services.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import Ptyxiaki.Exceptions.NotFoundException;
+
+import java.util.List;
 
 @Service
 public class PostService implements IPostService {
@@ -13,4 +22,51 @@ public class PostService implements IPostService {
     private IPostRepository postRepository;
     @Autowired
     private IUserRepository userRepository;
+
+    public List<PostDto> findAll() {
+        List<Post> posts = postRepository.findAll(Sort.by("id"));
+        return posts.stream()
+                .map(post -> mapToDto(post, new PostDto()))
+                .toList();
+    }
+
+    public PostDto get(final Long id) {
+        return postRepository.findById(id)
+                .map(post -> mapToDto(post, new PostDto()))
+                .orElseThrow(NotFoundException::new);
+    }
+
+    public void create(final PostDto postDTO) {
+        final Post post = new Post();
+        mapToEntity(postDTO, post);
+
+        String username = SecurityUtility.getSessionUser();
+        AppUser user = userRepository.findByUsername(username);
+        post.setCreatedBy(user);
+
+        postRepository.save(post);
+    }
+
+    public void update(final Long id, final PostDto postDTO) {
+        final Post post = postRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        mapToEntity(postDTO, post);
+        postRepository.save(post);
+    }
+
+    public void delete(final Long id) {
+        postRepository.deleteById(id);
+    }
+
+    private PostDto mapToDto(final Post post, final PostDto postDTO) {
+        postDTO.setId(post.getId());
+        postDTO.setTitle(post.getTitle());
+        postDTO.setDescription(post.getDescription());
+        return postDTO;
+    }
+
+    private void mapToEntity(final PostDto postDTO, final Post post) {
+        post.setTitle(postDTO.getTitle());
+        post.setDescription(postDTO.getDescription());
+    }
 }

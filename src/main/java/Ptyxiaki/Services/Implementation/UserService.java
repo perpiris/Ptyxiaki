@@ -17,10 +17,8 @@ public class UserService implements IUserService {
 
     @Autowired
     private IUserRepository userRepository;
-
     @Autowired
     private IRoleRepository roleRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -30,8 +28,8 @@ public class UserService implements IUserService {
         user.setUsername(registrationDto.getUsername());
         user.setEmail(registrationDto.getEmail());
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
-        AppRole role = roleRepository.findByName("USER");
-        user.setRoles(Collections.singletonList(role));
+//        AppRole role = roleRepository.findByName(registrationDto.getRole());
+//        user.setRoles(Collections.singletonList(role));
         userRepository.save(user);
     }
 

@@ -21,36 +21,38 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login() {
+
         return "login";
     }
 
     @GetMapping("/register")
-    public String register(Model model) {
+    public String getRegisterForm(Model model) {
+
         RegisterDto user = new RegisterDto();
         model.addAttribute("user", user);
         return "register";
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("user") RegisterDto user, BindingResult result, Model model , final RedirectAttributes redirectAttributes) {
+    public String register(@ModelAttribute("user") @Valid RegisterDto user, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+
+        if(bindingResult.hasErrors()) {
+            return "register";
+        }
 
         AppUser existingUserEmail = userService.findByEmail(user.getEmail());
-        if (existingUserEmail != null && existingUserEmail.getEmail() != null && !existingUserEmail.getEmail().isEmpty()) {
-            return "register";
+        if(existingUserEmail != null && existingUserEmail.getEmail() != null && !existingUserEmail.getEmail().isEmpty()) {
+            return "redirect:/register?fail";
         }
 
         AppUser existingUserUsername = userService.findByUsername(user.getUsername());
-        if (existingUserUsername != null && existingUserUsername.getUsername() != null && !existingUserUsername.getUsername().isEmpty()) {
-            return "register";
-        }
-
-        if (result.hasErrors()) {
-            model.addAttribute("user", user);
-            return "register";
+        if(existingUserUsername != null && existingUserUsername.getUsername() != null && !existingUserUsername.getUsername().isEmpty()) {
+            return "redirect:/register?fail";
         }
 
         userService.saveUser(user);
-        redirectAttributes.addFlashAttribute("MSG_SUCCESS", "Registration successful.");
+        redirectAttributes.addFlashAttribute("MSG_SUCCESS", "You have registered successfully.");
+
         return "redirect:/login";
     }
 }
