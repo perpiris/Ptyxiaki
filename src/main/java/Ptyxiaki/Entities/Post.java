@@ -1,5 +1,7 @@
 package Ptyxiaki.Entities;
 
+import Ptyxiaki.Enums.JobType;
+import Ptyxiaki.Enums.WorkLocation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +29,14 @@ public class Post {
 
     @Column(nullable = false, columnDefinition = "text")
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "job_type", nullable = false)
+    private JobType jobType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "work_location", nullable = false)
+    private WorkLocation workLocation;
 
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)

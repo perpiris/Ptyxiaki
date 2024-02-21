@@ -1,6 +1,8 @@
 package Ptyxiaki.Controllers;
 
 import Ptyxiaki.Dtos.PostDto;
+import Ptyxiaki.Enums.JobType;
+import Ptyxiaki.Enums.WorkLocation;
 import Ptyxiaki.Services.IPostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,12 @@ public class PostController {
 
     @Autowired
     private IPostService postService;
+
+    @ModelAttribute
+    public void prepareContext(final Model model) {
+        model.addAttribute("jobTypeValues", JobType.values());
+        model.addAttribute("workLocationValues", WorkLocation.values());
+    }
 
     @GetMapping
     public String list(final Model model) {
@@ -47,7 +55,7 @@ public class PostController {
         postService.create(postDto);
         redirectAttributes.addFlashAttribute("MSG_SUCCESS", "Post created successfully.");
 
-        return "redirect:/posts";
+        return "redirect:/manage";
     }
 
     @GetMapping("/edit/{id}")
@@ -67,7 +75,7 @@ public class PostController {
         postService.update(id, postDto);
         redirectAttributes.addFlashAttribute("MSG_SUCCESS", "Post updated successfully.");
 
-        return "redirect:/posts";
+        return "redirect:/manage";
     }
 
     @PostMapping("/delete/{id}")
@@ -76,7 +84,7 @@ public class PostController {
         postService.delete(id);
         redirectAttributes.addFlashAttribute("MSG_INFO", "Post deleted successfully.");
 
-        return "redirect:/posts";
+        return "redirect:/manage";
     }
 
     @GetMapping("/applications")

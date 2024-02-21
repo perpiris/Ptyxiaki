@@ -68,15 +68,19 @@ public class PostService implements IPostService {
         postRepository.deleteById(id);
     }
 
-    private PostDto mapToDto(final Post post, final PostDto postDTO) {
-        postDTO.setId(post.getId());
-        postDTO.setTitle(post.getTitle());
-        postDTO.setDescription(post.getDescription());
-        return postDTO;
+    private PostDto mapToDto(final Post post, final PostDto postDto) {
+        postDto.setId(post.getId());
+        postDto.setTitle(post.getTitle());
+        postDto.setDescription(post.getDescription());
+        postDto.setJobType(post.getJobType());
+        postDto.setWorkLocation(post.getWorkLocation());
+        return postDto;
     }
 
     private void mapToEntity(final PostDto postDTO, final Post post) {
         post.setTitle(postDTO.getTitle());
         post.setDescription(postDTO.getDescription());
+        post.setJobType(postDTO.getJobType());
+        post.setWorkLocation(postDTO.getWorkLocation());
     }
 }
