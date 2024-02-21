@@ -24,6 +24,13 @@ public class PostController {
         return "post/list";
     }
 
+    @GetMapping("/details/{id}")
+    public String details(@PathVariable("id") long id, Model model) {
+
+        model.addAttribute("post", postService.get(id));
+        return "post/details";
+    }
+
     @GetMapping("/create")
     public String create(@ModelAttribute("post") PostDto postDto) {
 
@@ -82,7 +89,7 @@ public class PostController {
     @GetMapping("/manage")
     public String manage(final Model model) {
 
-        model.addAttribute("posts", postService.findAll());
+        model.addAttribute("posts", postService.findAllForManager());
         return "post/manage";
     }
 }

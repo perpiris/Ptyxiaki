@@ -9,15 +9,17 @@
 
     <div class="row">
         <div class="col-3">
-            <h1>filters</h1>
+            filters
         </div>
 
         <div class="col-9">
-            <div class="card mb-3" th:each="post : ${posts}">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${post.title}"></h5>
-                    <p class="card-text" th:text="${post.description}"></p>
-                </div>
+            <div class="list-group list-group-flush border-bottom scrollarea">
+                <a th:each="post : ${posts}" th:href="@{/posts/details/{postId}(postId=${post.id})}" class="list-group-item list-group-item-action py-3 lh-sm">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                        <strong class="mb-1" th:text="${post.title}">Title</strong>
+                    </div>
+                    <div class="col-10 mb-1 small" th:text="${post.description}">Description</div>
+                </a>
             </div>
         </div>
     </div>

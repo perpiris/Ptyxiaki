@@ -43,4 +43,7 @@ public class AppUser {
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
     private List<AppRole> roles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<UserPostApplication> applications = new ArrayList<>();
 }

@@ -30,6 +30,16 @@ public class PostService implements IPostService {
                 .toList();
     }
 
+    public List<PostDto> findAllForManager() {
+        String username = SecurityUtility.getSessionUser();
+        AppUser user = userRepository.findByUsername(username);
+
+        List<Post> posts = postRepository.findAllByCreatedBy(user);
+        return posts.stream()
+                .map(post -> mapToDto(post, new PostDto()))
+                .toList();
+    }
+
     public PostDto get(final Long id) {
         return postRepository.findById(id)
                 .map(post -> mapToDto(post, new PostDto()))

@@ -42,12 +42,14 @@ public class AuthController {
 
         AppUser existingUserEmail = userService.findByEmail(user.getEmail());
         if(existingUserEmail != null && existingUserEmail.getEmail() != null && !existingUserEmail.getEmail().isEmpty()) {
-            return "redirect:/register?fail";
+            redirectAttributes.addFlashAttribute("MSG_ERROR", "error");
+            return "redirect:/register";
         }
 
         AppUser existingUserUsername = userService.findByUsername(user.getUsername());
         if(existingUserUsername != null && existingUserUsername.getUsername() != null && !existingUserUsername.getUsername().isEmpty()) {
-            return "redirect:/register?fail";
+            redirectAttributes.addFlashAttribute("MSG_ERROR", "error");
+            return "redirect:/register";
         }
 
         userService.saveUser(user);

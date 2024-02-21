@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,4 +31,7 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)
     private AppUser createdBy;
+
+    @OneToMany(mappedBy = "post")
+    private List<UserPostApplication> applications = new ArrayList<>();
 }

@@ -8,6 +8,8 @@ public interface IPostService {
 
     List<PostDto> findAll();
 
+    List<PostDto> findAllForManager();
+
     PostDto get(final Long id);
 
     void create(PostDto postDto);

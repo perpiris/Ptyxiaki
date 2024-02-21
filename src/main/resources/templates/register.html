@@ -14,7 +14,7 @@
                 <h1 class="flex-grow-1">Registration Form</h1>
             </div>
 
-            <form th:action="@{/register}" th:object="${user}" method="post">
+            <form th:action="@{/register}" th:object="${user}" method="post" autocomplete="off">
 
                 <div class="form-group mb-3">
                     <label for="username">Username</label>
