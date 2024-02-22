@@ -25,11 +25,14 @@ public class UserService implements IUserService {
     @Override
     public void saveUser(RegisterDto registrationDto) {
         AppUser user = new AppUser();
+        user.setName(registrationDto.getName());
+        user.setSurname(registrationDto.getSurname());
         user.setUsername(registrationDto.getUsername());
         user.setEmail(registrationDto.getEmail());
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
-//        AppRole role = roleRepository.findByName(registrationDto.getRole());
-//        user.setRoles(Collections.singletonList(role));
+
+        AppRole role = roleRepository.findByName(registrationDto.getUserRole().getDisplayName());
+        user.setRoles(Collections.singletonList(role));
         userRepository.save(user);
     }
 

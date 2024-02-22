@@ -2,6 +2,7 @@ package Ptyxiaki.Controllers;
 
 import Ptyxiaki.Dtos.RegisterDto;
 import Ptyxiaki.Entities.AppUser;
+import Ptyxiaki.Enums.UserRole;
 import Ptyxiaki.Services.Implementation.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,23 +14,32 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 @Controller
 public class AuthController {
 
     @Autowired
     private UserService userService;
 
+    @ModelAttribute
+    public void prepareContext(final Model model) {
+        var roles = Arrays.stream(UserRole.values())
+                .filter(role -> !role.equals(UserRole.ADMIN))
+                .collect(Collectors.toList());
+
+        model.addAttribute("userRoleValues", roles);
+    }
+
     @GetMapping("/login")
     public String login() {
-
         return "login";
     }
 
     @GetMapping("/register")
-    public String getRegisterForm(Model model) {
+    public String getRegisterForm(@ModelAttribute("user") RegisterDto registerDto) {
 
-        RegisterDto user = new RegisterDto();
-        model.addAttribute("user", user);
         return "register";
     }
 

@@ -115,4 +115,18 @@ public class PostController {
 
         return "post/manage";
     }
+
+    @PostMapping("/apply")
+    public String applyToPost(@RequestParam Long postId, RedirectAttributes redirectAttributes) {
+        try {
+            postService.applyToPost(postId);
+            redirectAttributes.addFlashAttribute("MSG_SUCCESS", "You have applied successfully.");
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("MSG_INFO", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("MSG_ERROR", e.getMessage());
+        }
+
+        return "redirect:/posts/details/" + postId.toString();
+    }
 }

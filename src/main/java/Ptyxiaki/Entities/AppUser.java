@@ -21,17 +21,20 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(nullable = false)
-//    private String name;
-//
-//    @Column(nullable = false)
-//    private String surname;
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String surname;
 
     @Column(nullable = false)
     private String username;
 
     @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false, length = 10)
+    private String phone;
 
     @Column(nullable = false)
     private String password;
@@ -45,5 +48,5 @@ public class AppUser {
     private List<AppRole> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<UserPostApplication> applications = new ArrayList<>();
+    private List<Application> applications = new ArrayList<>();
 }

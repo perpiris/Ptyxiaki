@@ -42,23 +42,11 @@
 
         <nav>
             <ul class="pagination justify-content-center mt-3">
-                <!--                <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">-->
-                <!--                    <a th:href="@{/posts/manage(page=0)}" class="page-link">First</a>-->
-                <!--                </li>-->
-                <!--                <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">-->
-                <!--                    <a th:href="@{/posts/manage(page=${currentPage - 1})}" class="page-link">Previous</a>-->
-                <!--                </li>-->
                 <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
                     th:class="${pageNumber == currentPage} ? 'page-item active' : 'page-item'">
                     <a th:href="@{/posts/manage(page=${pageNumber})}" class="page-link"
                        th:text="${pageNumber + 1}">1</a>
                 </li>
-                <!--                <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">-->
-                <!--                    <a th:href="@{/posts/manage(page=${currentPage + 1})}" class="page-link">Next</a>-->
-                <!--                </li>-->
-                <!--                <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">-->
-                <!--                    <a th:href="@{/posts/manage(page=${totalPages - 1})}" class="page-link">Last</a>-->
-                <!--                </li>-->
             </ul>
         </nav>
 

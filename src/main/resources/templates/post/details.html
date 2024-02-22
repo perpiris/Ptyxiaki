@@ -9,8 +9,12 @@
 
     <div class="d-flex flex-wrap mb-4">
         <h1 class="flex-grow-1" th:text="${post.title}">Post Title</h1>
-        <div>
-            <a th:href="@{/posts}" class="btn btn-secondary">Back to list</a>
+        <div class="d-flex align-items-center">
+            <a th:href="@{/posts}" class="btn btn-secondary me-2">Back to list</a>
+            <form th:action="@{/posts/apply}" method="post">
+                <input type="hidden" name="postId" th:value="${post.id}" />
+                <button type="submit" class="btn btn-info">Apply</button>
+            </form>
         </div>
     </div>
 

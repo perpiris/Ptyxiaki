@@ -43,5 +43,5 @@ public class Post {
     private AppUser createdBy;
 
     @OneToMany(mappedBy = "post")
-    private List<UserPostApplication> applications = new ArrayList<>();
+    private List<Application> applications = new ArrayList<>();
 }

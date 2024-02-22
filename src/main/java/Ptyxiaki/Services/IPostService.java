@@ -16,4 +16,6 @@ public interface IPostService {
     void update(final Long id, final PostDto postDTO);
 
     void delete(final Long id);
+
+    void applyToPost(Long postId);
 }

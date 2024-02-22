@@ -1,17 +1,20 @@
 package Ptyxiaki.Dtos;
 
+import Ptyxiaki.Enums.UserRole;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class RegisterDto {
 
-//    @NotEmpty
-//    private String name;
-//
-//    @NotEmpty
-//    private String surname;
+    @NotEmpty(message = "This field is required.")
+    private String name;
+
+    @NotEmpty(message = "This field is required.")
+    private String surname;
 
     @NotEmpty(message = "This field is required.")
     private String username;
@@ -20,8 +23,11 @@ public class RegisterDto {
     private String email;
 
     @NotEmpty(message = "This field is required.")
+    private String phone;
+
+    @NotEmpty(message = "This field is required.")
     private String password;
 
-//    @NotNull
-//    private String role;
+    @NotNull(message = "This field is required.")
+    private UserRole userRole;
 }

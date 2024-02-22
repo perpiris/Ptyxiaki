@@ -3,7 +3,10 @@ package Ptyxiaki.Services.Implementation;
 import Ptyxiaki.Dtos.PostDto;
 import Ptyxiaki.Entities.AppUser;
 import Ptyxiaki.Entities.Post;
+import Ptyxiaki.Entities.Application;
+import Ptyxiaki.Enums.ApplicationStatus;
 import Ptyxiaki.Repositories.IPostRepository;
+import Ptyxiaki.Repositories.IApplicationRepository;
 import Ptyxiaki.Repositories.IUserRepository;
 import Ptyxiaki.Security.SecurityUtility;
 import Ptyxiaki.Services.IPostService;
@@ -23,6 +26,8 @@ public class PostService implements IPostService {
     private IPostRepository postRepository;
     @Autowired
     private IUserRepository userRepository;
+    @Autowired
+    private IApplicationRepository userPostApplicationRepository;
 
     public Page<PostDto> findAll(int pageNumber, int pageSize, String sortBy) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).ascending());
@@ -61,6 +66,31 @@ public class PostService implements IPostService {
                 .orElseThrow(NotFoundException::new);
         mapToEntity(postDTO, post);
         postRepository.save(post);
+    }
+
+    public void applyToPost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(NotFoundException::new);
+        String username = SecurityUtility.getSessionUser();
+        AppUser user = userRepository.findByUsername(username);
+
+        if (post.getCreatedBy().getId().equals(user.getId())) {
+            throw new IllegalStateException("The user who created the post cannot apply to it.");
+        }
+
+        for (Application application : post.getApplications()) {
+            if (application.getUser().equals(user)) {
+                throw new IllegalArgumentException("You have already applied to this post.");
+            }
+        }
+
+        Application application = Application.builder()
+                .user(user)
+                .post(post)
+                .build();
+
+        application.setStatus(ApplicationStatus.PENDING);
+
+        userPostApplicationRepository.save(application);
     }
 
     public void delete(final Long id) {
