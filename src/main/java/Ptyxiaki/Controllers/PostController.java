@@ -6,6 +6,7 @@ import Ptyxiaki.Enums.WorkLocation;
 import Ptyxiaki.Services.IPostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,9 +27,16 @@ public class PostController {
     }
 
     @GetMapping
-    public String list(final Model model) {
+    public String list(@RequestParam(defaultValue = "0") int page,
+                       @RequestParam(defaultValue = "10") int size,
+                       @RequestParam(defaultValue = "id") String sortBy,
+                       final Model model) {
 
-        model.addAttribute("posts", postService.findAll());
+        Page<PostDto> postPage = postService.findAll(page, size, sortBy);
+        model.addAttribute("posts", postPage.getContent());
+        model.addAttribute("currentPage", postPage.getNumber());
+        model.addAttribute("totalPages", postPage.getTotalPages());
+
         return "post/list";
     }
 
@@ -55,7 +63,7 @@ public class PostController {
         postService.create(postDto);
         redirectAttributes.addFlashAttribute("MSG_SUCCESS", "Post created successfully.");
 
-        return "redirect:/manage";
+        return "redirect:/posts/manage";
     }
 
     @GetMapping("/edit/{id}")
@@ -90,14 +98,21 @@ public class PostController {
     @GetMapping("/applications")
     public String applications(final Model model) {
 
-        model.addAttribute("posts", postService.findAll());
+        // model.addAttribute("posts", postService.findAll());
         return "post/applications";
     }
 
     @GetMapping("/manage")
-    public String manage(final Model model) {
+    public String manage(@RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "10") int size,
+                         @RequestParam(defaultValue = "id") String sortBy,
+                         final Model model) {
 
-        model.addAttribute("posts", postService.findAllForManager());
+        Page<PostDto> postPage = postService.findAllForManager(page, size, sortBy);
+        model.addAttribute("posts", postPage.getContent());
+        model.addAttribute("currentPage", postPage.getNumber());
+        model.addAttribute("totalPages", postPage.getTotalPages());
+
         return "post/manage";
     }
 }

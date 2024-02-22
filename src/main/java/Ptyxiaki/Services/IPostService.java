@@ -1,14 +1,13 @@
 package Ptyxiaki.Services;
 
 import Ptyxiaki.Dtos.PostDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface IPostService {
 
-    List<PostDto> findAll();
+    Page<PostDto> findAll(int pageNumber, int pageSize, String sortBy);
 
-    List<PostDto> findAllForManager();
+    Page<PostDto> findAllForManager(int pageNumber, int pageSize, String sortBy);
 
     PostDto get(final Long id);
 

@@ -14,13 +14,37 @@
 
         <div class="col-9">
             <div class="list-group list-group-flush border-bottom scrollarea">
-                <a th:each="post : ${posts}" th:href="@{/posts/details/{postId}(postId=${post.id})}" class="list-group-item list-group-item-action py-3 lh-sm">
+                <a th:each="post : ${posts}" th:href="@{/posts/details/{postId}(postId=${post.id})}"
+                   class="list-group-item list-group-item-action py-3 lh-sm">
                     <div class="d-flex w-100 align-items-center justify-content-between">
                         <strong class="mb-1" th:text="${post.title}">Title</strong>
                     </div>
                     <div class="col-10 mb-1 small" th:text="${post.description}">Description</div>
                 </a>
             </div>
+
+            <nav>
+                <ul class="pagination justify-content-center mt-3">
+                    <!--                <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">-->
+                    <!--                    <a th:href="@{/posts/list(page=0)}" class="page-link">First</a>-->
+                    <!--                </li>-->
+                    <!--                <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">-->
+                    <!--                    <a th:href="@{/posts/list(page=${currentPage - 1})}" class="page-link">Previous</a>-->
+                    <!--                </li>-->
+                    <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:class="${pageNumber == currentPage} ? 'page-item active' : 'page-item'">
+                        <a th:href="@{/posts/list(page=${pageNumber})}" class="page-link"
+                           th:text="${pageNumber + 1}">1</a>
+                    </li>
+                    <!--                <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">-->
+                    <!--                    <a th:href="@{/posts/list(page=${currentPage + 1})}" class="page-link">Next</a>-->
+                    <!--                </li>-->
+                    <!--                <li th:class="${currentPage == totalPages - 1} ? 'page-item disabled' : 'page-item'">-->
+                    <!--                    <a th:href="@{/posts/list(page=${totalPages - 1})}" class="page-link">Last</a>-->
+                    <!--                </li>-->
+                </ul>
+            </nav>
+
         </div>
     </div>
 

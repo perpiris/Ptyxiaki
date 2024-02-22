@@ -8,12 +8,13 @@ import Ptyxiaki.Repositories.IUserRepository;
 import Ptyxiaki.Security.SecurityUtility;
 import Ptyxiaki.Services.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import Ptyxiaki.Exceptions.NotFoundException;
-
-import java.util.List;
 
 @Service
 public class PostService implements IPostService {
@@ -23,21 +24,19 @@ public class PostService implements IPostService {
     @Autowired
     private IUserRepository userRepository;
 
-    public List<PostDto> findAll() {
-        List<Post> posts = postRepository.findAll(Sort.by("id"));
-        return posts.stream()
-                .map(post -> mapToDto(post, new PostDto()))
-                .toList();
+    public Page<PostDto> findAll(int pageNumber, int pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).ascending());
+        Page<Post> postPage = postRepository.findAll(pageable);
+        return postPage.map(post -> mapToDto(post, new PostDto()));
     }
 
-    public List<PostDto> findAllForManager() {
+    public Page<PostDto> findAllForManager(int pageNumber, int pageSize, String sortBy) {
         String username = SecurityUtility.getSessionUser();
         AppUser user = userRepository.findByUsername(username);
 
-        List<Post> posts = postRepository.findAllByCreatedBy(user);
-        return posts.stream()
-                .map(post -> mapToDto(post, new PostDto()))
-                .toList();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).ascending());
+        Page<Post> postPage = postRepository.findAllByCreatedBy(user, pageable);
+        return postPage.map(post -> mapToDto(post, new PostDto()));
     }
 
     public PostDto get(final Long id) {
