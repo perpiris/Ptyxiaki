@@ -13,3 +13,21 @@ handleEvent('submit', '.js-submit-confirm', function(event) {
   }
   return true;
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    var filterForm = document.getElementById('filterForm');
+    var jobTypeFilters = document.querySelectorAll('.jobTypeFilter');
+    var workLocationFilters = document.querySelectorAll('.workLocationFilter');
+
+    function applyFilters() {
+        filterForm.submit();
+    }
+
+    jobTypeFilters.forEach(function(filter) {
+        filter.addEventListener('change', applyFilters);
+    });
+
+    workLocationFilters.forEach(function(filter) {
+        filter.addEventListener('change', applyFilters);
+    });
+});

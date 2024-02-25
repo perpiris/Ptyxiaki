@@ -9,26 +9,69 @@
 
     <div class="row">
         <div class="col-3">
-            filters
+
+            <form id="filterForm" th:action="@{/posts/list}" method="get">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Job Type</h5>
+                        <div class="form-check">
+                            <input class="form-check-input jobTypeFilter" type="radio" name="jobType" id="jobTypeAll"
+                                   value="" th:checked="${selectedJobType == null}"/>
+                            <label class="form-check-label" for="jobTypeAll">All</label>
+                        </div>
+                        <div class="form-check" th:each="jobType : ${jobTypeValues}">
+                            <input class="form-check-input jobTypeFilter" type="radio" name="jobType"
+                                   th:id="'jobType_' + ${jobType}" th:value="${jobType}"
+                                   th:checked="${jobType == selectedJobType}"/>
+                            <label class="form-check-label" th:for="'jobType_' + ${jobType}"
+                                   th:text="${jobType.displayName}"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Work Location</h5>
+                        <div class="form-check">
+                            <input class="form-check-input workLocationFilter" type="radio" name="workLocation"
+                                   id="workLocationAll" value="" th:checked="${selectedWorkLocation == null}"/>
+                            <label class="form-check-label" for="workLocationAll">All</label>
+                        </div>
+                        <div class="form-check" th:each="workLocation : ${workLocationValues}">
+                            <input class="form-check-input workLocationFilter" type="radio" name="workLocation"
+                                   th:id="'workLocation_' + ${workLocation}" th:value="${workLocation}"
+                                   th:checked="${workLocation == selectedWorkLocation}"/>
+                            <label class="form-check-label" th:for="'workLocation_' + ${workLocation}"
+                                   th:text="${workLocation.displayName}"></label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
         </div>
 
         <div class="col-9">
-            <div class="list-group list-group-flush border-bottom scrollarea">
+            <div th:if="${posts.empty}"><h1>No results found.</h1></div>
+            <div th:if="${!posts.empty}" class="list-group list-group-flush border-bottom scrollarea">
                 <a th:each="post : ${posts}" th:href="@{/posts/details/{postId}(postId=${post.id})}"
                    class="list-group-item list-group-item-action py-3 lh-sm">
                     <div class="d-flex w-100 align-items-center justify-content-between">
-                        <strong class="mb-1" th:text="${post.title}">Title</strong>
+                        <h2 th:text="${post.title}"></h2>
                     </div>
-                    <div class="col-10 mb-1 small" th:text="${post.description}">Description</div>
+                    <div class="col-10 mt-1">
+                        <span class="badge bg-secondary" th:text="${post.jobType.getDisplayName}"></span>
+                        <span class="badge bg-secondary" th:text="${post.workLocation.getDisplayName}"></span>
+                    </div>
+                    <div class="col-10 mt-4" th:text="${post.description}"></div>
                 </a>
             </div>
 
-            <nav>
+            <nav th:if="${!posts.empty}">
                 <ul class="pagination justify-content-center mt-3">
                     <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
                         th:class="${pageNumber == currentPage} ? 'page-item active' : 'page-item'">
                         <a th:href="@{/posts/list(page=${pageNumber})}" class="page-link"
-                           th:text="${pageNumber + 1}">1</a>
+                           th:text="${pageNumber + 1}"></a>
                     </li>
                 </ul>
             </nav>

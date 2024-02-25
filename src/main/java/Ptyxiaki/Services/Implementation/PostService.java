@@ -5,6 +5,8 @@ import Ptyxiaki.Entities.AppUser;
 import Ptyxiaki.Entities.Post;
 import Ptyxiaki.Entities.Application;
 import Ptyxiaki.Enums.ApplicationStatus;
+import Ptyxiaki.Enums.JobType;
+import Ptyxiaki.Enums.WorkLocation;
 import Ptyxiaki.Repositories.IPostRepository;
 import Ptyxiaki.Repositories.IApplicationRepository;
 import Ptyxiaki.Repositories.IUserRepository;
@@ -32,6 +34,34 @@ public class PostService implements IPostService {
     public Page<PostDto> findAll(int pageNumber, int pageSize, String sortBy) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).ascending());
         Page<Post> postPage = postRepository.findAll(pageable);
+        return postPage.map(post -> mapToDto(post, new PostDto()));
+    }
+
+    @Override
+    public Page<PostDto> findByJobType(JobType jobType, int pageNumber, int pageSize, String sortBy) {
+        if (jobType == null) { // If "All" option is selected
+            return findAll(pageNumber, pageSize, sortBy);
+        }
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).ascending());
+        Page<Post> postPage = postRepository.findByJobType(jobType, pageable);
+        return postPage.map(post -> mapToDto(post, new PostDto()));
+    }
+
+    public Page<PostDto> findByWorkLocation(WorkLocation workLocation, int pageNumber, int pageSize, String sortBy) {
+        if (workLocation == null) { // If "All" option is selected
+            return findAll(pageNumber, pageSize, sortBy);
+        }
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).ascending());
+        Page<Post> postPage = postRepository.findByWorkLocation(workLocation, pageable);
+        return postPage.map(post -> mapToDto(post, new PostDto()));
+    }
+
+    public Page<PostDto> findByJobTypeAndWorkLocation(JobType jobType, WorkLocation workLocation, int pageNumber, int pageSize, String sortBy) {
+        if (jobType == null && workLocation == null) { // If both "All" options are selected
+            return findAll(pageNumber, pageSize, sortBy);
+        }
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).ascending());
+        Page<Post> postPage = postRepository.findByJobTypeAndWorkLocation(jobType, workLocation, pageable);
         return postPage.map(post -> mapToDto(post, new PostDto()));
     }
 

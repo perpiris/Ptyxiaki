@@ -29,6 +29,7 @@ public class UserService implements IUserService {
         user.setSurname(registrationDto.getSurname());
         user.setUsername(registrationDto.getUsername());
         user.setEmail(registrationDto.getEmail());
+        user.setPhone(registrationDto.getPhone());
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
 
         AppRole role = roleRepository.findByName(registrationDto.getUserRole().getDisplayName());

@@ -26,13 +26,35 @@ public class PostController {
         model.addAttribute("workLocationValues", WorkLocation.values());
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public String list(@RequestParam(defaultValue = "0") int page,
                        @RequestParam(defaultValue = "10") int size,
                        @RequestParam(defaultValue = "id") String sortBy,
+                       @RequestParam(required = false) JobType jobType,
+                       @RequestParam(required = false) WorkLocation workLocation,
                        final Model model) {
 
-        Page<PostDto> postPage = postService.findAll(page, size, sortBy);
+        model.addAttribute("selectedJobType", null);
+        model.addAttribute("selectedWorkLocation", null);
+
+        Page<PostDto> postPage;
+        if (jobType != null && workLocation != null) {
+            postPage = postService.findByJobTypeAndWorkLocation(jobType, workLocation, page, size, sortBy);
+        } else if (jobType != null) {
+            postPage = postService.findByJobType(jobType, page, size, sortBy);
+        } else if (workLocation != null) {
+            postPage = postService.findByWorkLocation(workLocation, page, size, sortBy);
+        } else {
+            postPage = postService.findAll(page, size, sortBy);
+        }
+
+        if (jobType != null) {
+            model.addAttribute("selectedJobType", jobType);
+        }
+        if (workLocation != null) {
+            model.addAttribute("selectedWorkLocation", workLocation);
+        }
+
         model.addAttribute("posts", postPage.getContent());
         model.addAttribute("currentPage", postPage.getNumber());
         model.addAttribute("totalPages", postPage.getTotalPages());
@@ -83,7 +105,7 @@ public class PostController {
         postService.update(id, postDto);
         redirectAttributes.addFlashAttribute("MSG_SUCCESS", "Post updated successfully.");
 
-        return "redirect:/manage";
+        return "redirect:/posts/manage";
     }
 
     @PostMapping("/delete/{id}")
@@ -93,13 +115,6 @@ public class PostController {
         redirectAttributes.addFlashAttribute("MSG_INFO", "Post deleted successfully.");
 
         return "redirect:/manage";
-    }
-
-    @GetMapping("/applications")
-    public String applications(final Model model) {
-
-        // model.addAttribute("posts", postService.findAll());
-        return "post/applications";
     }
 
     @GetMapping("/manage")
