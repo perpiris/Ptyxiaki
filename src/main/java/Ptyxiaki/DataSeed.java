@@ -27,7 +27,10 @@ public class DataSeed implements CommandLineRunner {
             AppRole adminRole = new AppRole();
             adminRole.setName("ADMIN");
 
-            roleRepository.saveAll(List.of(developerRole, recruiterRole, adminRole));
+            AppRole userRole = new AppRole();
+            userRole.setName("USER");
+
+            roleRepository.saveAll(List.of(developerRole, recruiterRole, adminRole, userRole));
         }
     }
 }
