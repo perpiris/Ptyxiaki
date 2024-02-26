@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
     <title>Home</title>
@@ -7,19 +7,32 @@
 <body>
 <div layout:fragment="content">
 
-    <div sec:authorize="hasAuthority('USER')">
-        This content is only shown to USER.
-    </div>
-    <div sec:authorize="hasAuthority('ADMIN')">
-        This content is only shown to ADMIN.
-    </div>
+    <h1 class="text-center">Dev Jobs Description</h1>
+    <h2 class="mt-2">Functionality</h2>
+    <p>The Job Post Board is a web application designed to facilitate job postings for developers and recruiters. It
+        provides the following functionality:</p>
+    <ul>
+        <li>User Authentication: Users can register, login, and logout securely to access the platform.</li>
+        <li>User Roles: The application supports two main user roles - DEVELOPER and RECRUITER.</li>
+        <li>Job Posting: Recruiters can create and publish job postings with details such as job title,
+            description, etc.
+        </li>
+        <li>Job Application: Developers can view job postings and apply to the ones they are interested in.</li>
+        <li>Dashboard: Each user has a personalized dashboard where they can manage their job postings (for recruiters)
+            or applications (for developers).
+        </li>
+    </ul>
 
-    <div sec:authorize="hasAuthority('DEVELOPER')">
-        This content is only shown to DEVELOPER.
-    </div>
-    <div sec:authorize="hasAuthority('RECRUITER')">
-        This content is only shown to RECRUITER.
-    </div>
+    <h2 class="mt-2">Technologies Used</h2>
+    <ul>
+        <li>Java Spring</li>
+        <li>Spring Security</li>
+        <li>Spring MVC Architecture</li>
+        <li>PostgreSQL</li>
+        <li>HTML/CSS/JavaScript along with bootstrap</li>
+        <li>Thymeleaf</li>
+    </ul>
+
 </div>
 </body>
 </html>

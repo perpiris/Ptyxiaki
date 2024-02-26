@@ -22,25 +22,25 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/}">Home</a>
                 </li>
-                <li sec:authorize="isAuthenticated()" class="nav-item">
-                    <a class="nav-link" th:href="@{/posts/list}">Posted Jobs</a>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/posts/list}">Job List</a>
                 </li>
-                <li sec:authorize="isAuthenticated()" class="nav-item">
-                    <a class="nav-link" th:href="@{/applications/my-applications}">My Applications</a>
+                <li sec:authorize="isAuthenticated() && hasAuthority('DEVELOPER')" class="nav-item">
+                    <a class="nav-link" th:href="@{/applications/manage}">Applications</a>
                 </li>
-                <li sec:authorize="isAuthenticated()" class="nav-item">
+                <li sec:authorize="isAuthenticated() && hasAuthority('RECRUITER')" class="nav-item">
                     <a class="nav-link" th:href="@{/posts/manage}">My Posts</a>
                 </li>
             </ul>
 
             <ul class="navbar-nav">
-                <li sec:authorize="!isAuthenticated()"  class="nav-item">
+                <li sec:authorize="!isAuthenticated()" class="nav-item">
                     <a class="nav-link" th:href="@{/login}">Log in</a>
                 </li>
-                <li sec:authorize="!isAuthenticated()"  class="nav-item">
+                <li sec:authorize="!isAuthenticated()" class="nav-item">
                     <a class="nav-link" th:href="@{/register}">Register</a>
                 </li>
-                <li sec:authorize="isAuthenticated()"  class="nav-item">
+                <li sec:authorize="isAuthenticated()" class="nav-item">
                     <a class="nav-link" th:href="@{/logout}">Log out</a>
                 </li>
             </ul>

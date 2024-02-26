@@ -1,17 +1,17 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}">
 <head>
-    <title th:text="${post.title}">Post Details</title>
+    <title th:text="${post.title}"></title>
 </head>
 <body>
 <div layout:fragment="content">
 
     <div class="d-flex flex-wrap mb-4">
-        <h1 class="flex-grow-1" th:text="${post.title}">Post Title</h1>
+        <h1 class="flex-grow-1" th:text="${post.title}"></h1>
         <div class="d-flex align-items-center">
-            <a th:href="@{/posts}" class="btn btn-secondary me-2">Back to list</a>
-            <form th:action="@{/posts/apply}" method="post">
+            <a th:href="@{/posts/list}" class="btn btn-secondary me-2">Back to list</a>
+            <form th:action="@{/posts/apply}" method="post" sec:authorize="isAuthenticated()">
                 <input type="hidden" name="postId" th:value="${post.id}" />
                 <button type="submit" class="btn btn-info">Apply</button>
             </form>

@@ -17,8 +17,8 @@ public class ApplicationController {
     @Autowired
     private IApplicationService applicationService;
 
-    @GetMapping("/my-applications")
-    public String myApplications(@RequestParam(defaultValue = "0") int page,
+    @GetMapping("/manage")
+    public String manage(@RequestParam(defaultValue = "0") int page,
                          @RequestParam(defaultValue = "10") int size,
                          @RequestParam(defaultValue = "id") String sortBy,
                          final Model model) {
@@ -28,6 +28,6 @@ public class ApplicationController {
         model.addAttribute("currentPage", postPage.getNumber());
         model.addAttribute("totalPages", postPage.getTotalPages());
 
-        return "application/my-applications";
+        return "application/manage";
     }
 }
