@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -33,9 +32,8 @@ public class UserService implements IUserService {
         user.setPhone(registrationDto.getPhone());
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
 
-        AppRole userRole = roleRepository.findByName("USER");
         AppRole role = roleRepository.findByName(registrationDto.getUserRole().toString());
-        user.setRoles(List.of(userRole, role));
+        user.setRoles(List.of(role));
         userRepository.save(user);
     }
 

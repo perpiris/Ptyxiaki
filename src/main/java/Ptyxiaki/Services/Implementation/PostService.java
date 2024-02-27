@@ -37,9 +37,8 @@ public class PostService implements IPostService {
         return postPage.map(post -> mapToDto(post, new PostDto()));
     }
 
-    @Override
     public Page<PostDto> findByJobType(JobType jobType, int pageNumber, int pageSize, String sortBy) {
-        if (jobType == null) { // If "All" option is selected
+        if (jobType == null) {
             return findAll(pageNumber, pageSize, sortBy);
         }
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).ascending());
@@ -48,7 +47,7 @@ public class PostService implements IPostService {
     }
 
     public Page<PostDto> findByWorkLocation(WorkLocation workLocation, int pageNumber, int pageSize, String sortBy) {
-        if (workLocation == null) { // If "All" option is selected
+        if (workLocation == null) {
             return findAll(pageNumber, pageSize, sortBy);
         }
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).ascending());
@@ -57,7 +56,7 @@ public class PostService implements IPostService {
     }
 
     public Page<PostDto> findByJobTypeAndWorkLocation(JobType jobType, WorkLocation workLocation, int pageNumber, int pageSize, String sortBy) {
-        if (jobType == null && workLocation == null) { // If both "All" options are selected
+        if (jobType == null && workLocation == null) {
             return findAll(pageNumber, pageSize, sortBy);
         }
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).ascending());
