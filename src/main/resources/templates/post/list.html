@@ -61,12 +61,11 @@
                                 <h2 th:text="${post.title}"></h2>
                             </div>
                             <div class="col-10 mt-1">
-                                <span class="badge bg-secondary" th:text="${post.jobType.getDisplayName}"></span>
-                                <span class="badge bg-secondary" th:text="${post.workLocation.getDisplayName}"></span>
+                                <span class="badge bg-primary" th:text="${post.jobType.getDisplayName}"></span>
+                                <span class="badge bg-primary" th:text="${post.workLocation.getDisplayName}"></span>
                             </div>
                             <div class="col-10 mt-4" th:text="${post.description}"></div>
                         </div>
-                        <!-- New piece of information: createdAt -->
                         <div class="col-2 text-end">
                             <small>Created </small><br>
                             <span th:text="${post.createdOn}"></span>

@@ -18,6 +18,19 @@
         </div>
     </div>
 
+    <div>
+        <p>Description: <span th:text="${post.description}"></span></p>
+        <p>Job Type: <span th:text="${post.jobType}"></span></p>
+        <p>Work Location: <span th:text="${post.workLocation}"></span></p>
+        <p>Created On: <span th:text="${post.createdOn}"></span></p>
+
+        <ul>
+            <li th:each="requirement : ${post.requirements}">
+                <span th:text="${requirement.label}">(<span th:text="${requirement.minimumYears}"></span>)</span>
+            </li>
+        </ul>
+    </div>
+
 </div>
 </body>
 </html>
