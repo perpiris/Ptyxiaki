@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collections;
 
 @Service
 public class UserService implements IUserService {
@@ -33,7 +33,7 @@ public class UserService implements IUserService {
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
 
         AppRole role = roleRepository.findByName(registrationDto.getUserRole().toString());
-        user.setRoles(List.of(role));
+        user.setRoles(Collections.singletonList(role));
         userRepository.save(user);
     }
 

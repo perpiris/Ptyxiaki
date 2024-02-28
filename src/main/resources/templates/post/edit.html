@@ -15,7 +15,7 @@
     </div>
 
     <div th:replace="~{fragments/forms::globalErrors('post')}"/>
-    <form th:action="${requestUri}" method="post">
+    <form th:action="${requestUri}" method="post" autocomplete="off">
         <div th:replace="~{fragments/forms::inputRow(object='post', field='title', required=true, label='Title')}"/>
         <div th:replace="~{fragments/forms::inputRow(object='post', field='description', required=true, type='textarea', label='Description')}"/>
         <div th:replace="~{fragments/forms::inputRow(object='post', field='jobType', required=true, type='radio', label='Job Type')}"/>

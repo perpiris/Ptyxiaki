@@ -8,7 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,16 @@ public class Post {
     @JoinColumn(name = "created_by", nullable = false)
     private AppUser createdBy;
 
+    @CreationTimestamp
+    private LocalDateTime createdOn;
+
     @OneToMany(mappedBy = "post")
     private List<Application> applications = new ArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "post_requirement",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "requirement_id"))
+    private List<Requirement> requirements = new ArrayList<>();
 }

@@ -1,9 +1,8 @@
 package Ptyxiaki.Services.Implementation;
 
 import Ptyxiaki.Dtos.PostDto;
-import Ptyxiaki.Entities.AppUser;
-import Ptyxiaki.Entities.Post;
-import Ptyxiaki.Entities.Application;
+import Ptyxiaki.Dtos.RequirementDto;
+import Ptyxiaki.Entities.*;
 import Ptyxiaki.Enums.ApplicationStatus;
 import Ptyxiaki.Enums.JobType;
 import Ptyxiaki.Enums.WorkLocation;
@@ -20,6 +19,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import Ptyxiaki.Exceptions.NotFoundException;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService implements IPostService {
@@ -132,6 +135,10 @@ public class PostService implements IPostService {
         postDto.setDescription(post.getDescription());
         postDto.setJobType(post.getJobType());
         postDto.setWorkLocation(post.getWorkLocation());
+        postDto.setCreatedOn(calculateRelativeTime(post.getCreatedOn()));
+        postDto.setRequirements(post.getRequirements().stream()
+                .map(this::mapRequirementToDto)
+                .collect(Collectors.toList()));
         return postDto;
     }
 
@@ -140,5 +147,39 @@ public class PostService implements IPostService {
         post.setDescription(postDTO.getDescription());
         post.setJobType(postDTO.getJobType());
         post.setWorkLocation(postDTO.getWorkLocation());
+        post.setRequirements(postDTO.getRequirements().stream()
+                .map(this::mapDtoToRequirement)
+                .collect(Collectors.toList()));
+    }
+
+    private String calculateRelativeTime(LocalDateTime createdDate) {
+        LocalDateTime now = LocalDateTime.now();
+        long seconds = now.atZone(ZoneId.systemDefault()).toEpochSecond() - createdDate.atZone(ZoneId.systemDefault()).toEpochSecond();
+        long days = seconds / (60 * 60 * 24);
+        long hours = seconds / (60 * 60);
+        long minutes = seconds / 60;
+        if (days > 0) {
+            return days + (days == 1 ? " day ago" : " days ago");
+        } else if (hours > 0) {
+            return hours + (hours == 1 ? " hour ago" : " hours ago");
+        } else if (minutes > 0) {
+            return minutes + (minutes == 1 ? " minute ago" : " minutes ago");
+        } else {
+            return seconds + (seconds == 1 ? " second ago" : " seconds ago");
+        }
+    }
+
+    private RequirementDto mapRequirementToDto(Requirement requirement) {
+        RequirementDto requirementDto = new RequirementDto();
+        requirementDto.setLabel(requirement.getLabel());
+        requirementDto.setMinimumYears(requirement.getMinimumYears());
+        return requirementDto;
+    }
+
+    private Requirement mapDtoToRequirement(RequirementDto requirementDto) {
+        Requirement requirement = new Requirement();
+        requirement.setLabel(requirementDto.getLabel());
+        requirement.setMinimumYears(requirementDto.getMinimumYears());
+        return requirement;
     }
 }

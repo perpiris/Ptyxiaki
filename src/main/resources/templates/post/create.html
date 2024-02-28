@@ -15,12 +15,27 @@
     </div>
 
     <div th:replace="~{fragments/forms::globalErrors('post')}"/>
-    <form th:action="${requestUri}" method="post">
+    <form th:action="${requestUri}" method="post" autocomplete="off">
         <div th:replace="~{fragments/forms::inputRow(object='post', field='title', required=true, label='Title')}"/>
         <div th:replace="~{fragments/forms::inputRow(object='post', field='description', required=true, type='textarea', label='Description')}"/>
         <div th:replace="~{fragments/forms::inputRow(object='post', field='jobType', required=true, type='radio', label='Job Type')}"/>
         <div th:replace="~{fragments/forms::inputRow(object='post', field='workLocation', required=true, type='radio', label='Work Location')}"/>
-        <input type="submit" th:value="Create" class="btn btn-primary mt-4"/>
+
+        <div class="row mb-3">
+            <div class="col-md-2">
+                <label>Requirements</label>
+            </div>
+            <div class="col-md-10" id="requirements">
+                <div class="row mb-3">
+
+                </div>
+            </div>
+            <button type="button" class="btn btn-success mt-4" id="add-requirement">Add Requirement</button>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <input type="submit" th:value="Create" class="btn btn-primary mt-4"/>
+        </div>
     </form>
 </div>
 </body>

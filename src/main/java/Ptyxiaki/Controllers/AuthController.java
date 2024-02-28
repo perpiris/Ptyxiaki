@@ -26,7 +26,6 @@ public class AuthController {
     @ModelAttribute
     public void prepareContext(final Model model) {
         var roles = Arrays.stream(UserRole.values())
-                .filter(role -> !role.equals(UserRole.ADMIN) && !role.equals(UserRole.USER))
                 .collect(Collectors.toList());
 
         model.addAttribute("userRoleValues", roles);
