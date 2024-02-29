@@ -41,6 +41,10 @@ public class Post {
     private WorkLocation workLocation;
 
     @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
+
+    @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)
     private AppUser createdBy;
 

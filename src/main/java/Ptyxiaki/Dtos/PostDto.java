@@ -28,6 +28,12 @@ public class PostDto {
     @NotNull(message = "This field is required.")
     private WorkLocation workLocation;
 
+    @NotEmpty(message = "This field is required.")
+    private String companyName;
+
+    @NotEmpty(message = "This field is required.")
+    private String companyWebsite;
+
     private String createdOn;
 
     private List<RequirementDto> requirements = new ArrayList<>();

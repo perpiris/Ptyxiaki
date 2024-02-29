@@ -6,9 +6,7 @@ import Ptyxiaki.Entities.*;
 import Ptyxiaki.Enums.ApplicationStatus;
 import Ptyxiaki.Enums.JobType;
 import Ptyxiaki.Enums.WorkLocation;
-import Ptyxiaki.Repositories.IPostRepository;
-import Ptyxiaki.Repositories.IApplicationRepository;
-import Ptyxiaki.Repositories.IUserRepository;
+import Ptyxiaki.Repositories.*;
 import Ptyxiaki.Security.SecurityUtility;
 import Ptyxiaki.Services.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,8 @@ import Ptyxiaki.Exceptions.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +33,10 @@ public class PostService implements IPostService {
     private IUserRepository userRepository;
     @Autowired
     private IApplicationRepository userPostApplicationRepository;
+    @Autowired
+    private ICompanyRepository companyRepository;
+    @Autowired
+    private IRequirementRepository requirementRepository;
 
     public Page<PostDto> findAll(int pageNumber, int pageSize, String sortBy) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).ascending());
@@ -84,7 +88,37 @@ public class PostService implements IPostService {
 
     public void create(final PostDto postDTO) {
         final Post post = new Post();
-        mapToEntity(postDTO, post);
+
+        post.setTitle(postDTO.getTitle());
+        post.setDescription(postDTO.getDescription());
+        post.setJobType(postDTO.getJobType());
+        post.setWorkLocation(postDTO.getWorkLocation());
+
+        Company existingCompany = companyRepository.findByName(postDTO.getCompanyName().toLowerCase());
+        if (existingCompany != null) {
+            post.setCompany(existingCompany);
+        } else {
+            Company newCompany = Company.builder()
+                    .name(postDTO.getCompanyName())
+                    .website(postDTO.getCompanyWebsite())
+                    .build();
+            post.setCompany(companyRepository.save(newCompany));
+        }
+
+        List<Requirement> requirements = new ArrayList<>();
+        for (RequirementDto requirementDto : postDTO.getRequirements()) {
+            Requirement existingRequirement = requirementRepository.findByLabel(requirementDto.getLabel().toLowerCase());
+            if (existingRequirement != null) {
+                requirements.add(existingRequirement);
+            } else {
+                Requirement newRequirement = Requirement.builder()
+                        .label(requirementDto.getLabel())
+                        .minimumYears(requirementDto.getMinimumYears())
+                        .build();
+                requirements.add(requirementRepository.save(newRequirement));
+            }
+        }
+        post.setRequirements(requirements);
 
         String username = SecurityUtility.getSessionUser();
         AppUser user = userRepository.findByUsername(username);
@@ -96,7 +130,38 @@ public class PostService implements IPostService {
     public void update(final Long id, final PostDto postDTO) {
         final Post post = postRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        mapToEntity(postDTO, post);
+
+        post.setTitle(postDTO.getTitle());
+        post.setDescription(postDTO.getDescription());
+        post.setJobType(postDTO.getJobType());
+        post.setWorkLocation(postDTO.getWorkLocation());
+
+        Company existingCompany = companyRepository.findByName(postDTO.getCompanyName().toLowerCase());
+        if (existingCompany != null) {
+            post.setCompany(existingCompany);
+        } else {
+            Company newCompany = Company.builder()
+                    .name(postDTO.getCompanyName())
+                    .website(postDTO.getCompanyWebsite())
+                    .build();
+            post.setCompany(companyRepository.save(newCompany));
+        }
+
+        List<Requirement> requirements = new ArrayList<>();
+        for (RequirementDto requirementDto : postDTO.getRequirements()) {
+            Requirement existingRequirement = requirementRepository.findByLabel(requirementDto.getLabel().toLowerCase());
+            if (existingRequirement != null) {
+                requirements.add(existingRequirement);
+            } else {
+                Requirement newRequirement = Requirement.builder()
+                        .label(requirementDto.getLabel())
+                        .minimumYears(requirementDto.getMinimumYears())
+                        .build();
+                requirements.add(requirementRepository.save(newRequirement));
+            }
+        }
+        post.setRequirements(requirements);
+
         postRepository.save(post);
     }
 
@@ -136,8 +201,10 @@ public class PostService implements IPostService {
         postDto.setJobType(post.getJobType());
         postDto.setWorkLocation(post.getWorkLocation());
         postDto.setCreatedOn(calculateRelativeTime(post.getCreatedOn()));
+        postDto.setCompanyName(post.getCompany().getName());
+        postDto.setCompanyWebsite(post.getCompany().getWebsite());
         postDto.setRequirements(post.getRequirements().stream()
-                .map(this::mapRequirementToDto)
+                .map(this::mapToDto)
                 .collect(Collectors.toList()));
         return postDto;
     }
@@ -148,7 +215,7 @@ public class PostService implements IPostService {
         post.setJobType(postDTO.getJobType());
         post.setWorkLocation(postDTO.getWorkLocation());
         post.setRequirements(postDTO.getRequirements().stream()
-                .map(this::mapDtoToRequirement)
+                .map(this::mapToEntity)
                 .collect(Collectors.toList()));
     }
 
@@ -169,14 +236,14 @@ public class PostService implements IPostService {
         }
     }
 
-    private RequirementDto mapRequirementToDto(Requirement requirement) {
+    private RequirementDto mapToDto(Requirement requirement) {
         RequirementDto requirementDto = new RequirementDto();
         requirementDto.setLabel(requirement.getLabel());
         requirementDto.setMinimumYears(requirement.getMinimumYears());
         return requirementDto;
     }
 
-    private Requirement mapDtoToRequirement(RequirementDto requirementDto) {
+    private Requirement mapToEntity(RequirementDto requirementDto) {
         Requirement requirement = new Requirement();
         requirement.setLabel(requirementDto.getLabel());
         requirement.setMinimumYears(requirementDto.getMinimumYears());

@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}">
 <head>
     <title th:text="${post.title}"></title>
@@ -9,26 +10,30 @@
 
     <div class="d-flex flex-wrap mb-4">
         <h1 class="flex-grow-1" th:text="${post.title}"></h1>
+        <p th:text="${post.createdOn}"></p>
+        <span class="badge badge-primary" th:text="${post.jobType.getDisplayName}"></span>
+        <span class="badge badge-primary" th:text="${post.workLocation.getDisplayName}"></span>
+
         <div class="d-flex align-items-center">
             <a th:href="@{/posts/list}" class="btn btn-secondary me-2">Back to list</a>
             <form th:action="@{/posts/apply}" method="post" sec:authorize="isAuthenticated()">
-                <input type="hidden" name="postId" th:value="${post.id}" />
+                <input type="hidden" name="postId" th:value="${post.id}"/>
                 <button type="submit" class="btn btn-info">Apply</button>
             </form>
         </div>
     </div>
 
-    <div>
-        <p>Description: <span th:text="${post.description}"></span></p>
-        <p>Job Type: <span th:text="${post.jobType}"></span></p>
-        <p>Work Location: <span th:text="${post.workLocation}"></span></p>
-        <p>Created On: <span th:text="${post.createdOn}"></span></p>
+    <div style="w-80">
+        <p><span th:text="${post.description}"></span></p>
 
-        <ul>
-            <li th:each="requirement : ${post.requirements}">
-                <span th:text="${requirement.label}">(<span th:text="${requirement.minimumYears}"></span>)</span>
-            </li>
-        </ul>
+        <div class="mt-4" th:if="${!post.requirements.empty}">
+            <h3>Requirements</h3>
+            <ul>
+                <li th:each="requirement : ${post.requirements}">
+                    <span th:text="${requirement.label + ' (' + requirement.minimumYears + ' years)'}"></span>
+                </li>
+            </ul>
+        </div>
     </div>
 
 </div>

@@ -17,6 +17,14 @@
     <div th:replace="~{fragments/forms::globalErrors('post')}"/>
     <form th:action="${requestUri}" method="post" autocomplete="off">
         <div th:replace="~{fragments/forms::inputRow(object='post', field='title', required=true, label='Title')}"/>
+        <div class="row mb-3 col-md-10 offset-md-2">
+            <div class="col">
+                <div th:replace="~{fragments/forms::inputRow(object='post', field='companyName', required=true, label='Company')}"/>
+            </div>
+            <div class="col">
+                <div th:replace="~{fragments/forms::inputRow(object='post', field='companyWebsite', required=true, label='Website')}"/>
+            </div>
+        </div>
         <div th:replace="~{fragments/forms::inputRow(object='post', field='description', required=true, type='textarea', label='Description')}"/>
         <div th:replace="~{fragments/forms::inputRow(object='post', field='jobType', required=true, type='radio', label='Job Type')}"/>
         <div th:replace="~{fragments/forms::inputRow(object='post', field='workLocation', required=true, type='radio', label='Work Location')}"/>

@@ -28,7 +28,7 @@
                 <td>[[${post.title}]]</td>
                 <td>
                     <div class="float-end text-nowrap">
-                        <a th:href="@{/posts/edit/{id}(id=${post.id})}" class="btn btn-sm btn-secondary">Edit</a>
+                        <a th:href="@{/posts/update/{id}(id=${post.id})}" class="btn btn-sm btn-secondary">Edit</a>
                         <form th:action="@{/posts/delete/{id}(id=${post.id})}"
                               th:data-confirm-message="#{delete.confirm}" method="post"
                               class="js-submit-confirm d-inline">

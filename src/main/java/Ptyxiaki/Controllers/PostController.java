@@ -88,18 +88,18 @@ public class PostController {
         return "redirect:/posts/manage";
     }
 
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable(name = "id") Long id, Model model) {
+    @GetMapping("/update/{id}")
+    public String update(@PathVariable(name = "id") Long id, Model model) {
 
         model.addAttribute("post", postService.get(id));
-        return "post/edit";
+        return "post/update";
     }
 
-    @PostMapping("/edit/{id}")
-    public String edit(@PathVariable(name = "id") Long id, @ModelAttribute("post") @Valid PostDto postDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    @PostMapping("/update/{id}")
+    public String update(@PathVariable(name = "id") Long id, @ModelAttribute("post") @Valid PostDto postDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            return "post/edit";
+            return "post/update";
         }
 
         postService.update(id, postDto);
